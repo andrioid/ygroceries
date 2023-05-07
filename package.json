@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "ws": "HOST=10.8.4.38 PORT=1234 YPERSISTANCE=./dbDir node ./node_modules/y-websocket/bin/server.js"
   },
   "dependencies": {
     "@craftzdog/react-native-buffer": "^6.0.5",
