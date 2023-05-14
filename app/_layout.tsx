@@ -7,7 +7,7 @@ export const unstable_settings = {
 
 export default function Layout() {
   return (
-    <YProvider roomId="asdf">
+    <YProvider roomId="fdasf">
       <Stack>
         <Stack.Screen name="list/add" options={{ presentation: "modal" }} />
       </Stack>

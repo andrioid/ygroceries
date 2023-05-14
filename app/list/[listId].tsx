@@ -1,41 +1,38 @@
-import { Alert, Button, FlatList, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  Alert,
+  Button,
+  FlatList,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { useSharedMap } from "../../lib/data";
 import { Stack, usePathname, useRouter } from "expo-router";
 import { useEffect, useId } from "react";
 import { randomUUID } from "expo-crypto";
-
-type GroceryList = {
-  id: string;
-  name: string;
-  items: Array<{
-    id: string;
-    name: string;
-    completed: boolean;
-  }>;
-};
+import { useGroceryList } from "../../lib/use-list";
 
 export default function ListScreen() {
   const pathname = usePathname();
-  const [snap, mutate] = useSharedMap<GroceryList>(pathname);
+  const [snap, { setName, addItem, setItem }] = useGroceryList("testlist123");
   const router = useRouter();
+  console.log("render snap", snap);
 
-  useEffect(() => {
-    if (snap.items) return;
-    if (!snap.items) {
-      mutate("items", []);
-    }
-  }, [snap.items]);
+  if (!snap) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
       <Stack.Screen
         options={{
-          title: snap.name,
+          title: snap.name || "Untitled",
         }}
       />
       <Text style={{ marginBottom: 20 }}>List Name</Text>
       <TextInput
-        onChangeText={(newValue) => mutate("name", newValue)}
+        onChangeText={(newValue) => setName(newValue)}
         defaultValue={snap.name}
         style={{
           minHeight: 50,
@@ -45,7 +42,7 @@ export default function ListScreen() {
           marginBottom: 20,
         }}
       />
-      <Text>List {snap.items?.length}</Text>
+      <Text>List</Text>
       <FlatList
         data={snap.items}
         keyExtractor={(i) => i.id}
@@ -70,17 +67,24 @@ export default function ListScreen() {
       <Button
         title="Add"
         onPress={() => {
-          router.push("list/add");
+          addItem({ name: "Fancy pants", completed: false });
           return;
-          if (!snap.items) return;
-          mutate("items", [
-            ...snap.items,
-            {
-              id: randomUUID(),
-              completed: false,
-              name: "omg item",
-            },
-          ]);
+          // router.push("list/add", { onAddItem: });
+          // mutateMap((m) =>
+          //   m.set("asdf", {
+          //     id: "moo",
+          //   })
+          // );
+          // return;
+          // if (!snap.items) return;
+          // mutate("items", [
+          //   ...snap.items,
+          //   {
+          //     id: randomUUID(),
+          //     completed: false,
+          //     name: "omg item",
+          //   },
+          // ]);
         }}
       />
     </View>
