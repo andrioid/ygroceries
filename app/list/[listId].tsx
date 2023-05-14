@@ -7,15 +7,18 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { useSharedMap } from "../../lib/data";
 import { Stack, usePathname, useRouter } from "expo-router";
 import { useEffect, useId } from "react";
 import { randomUUID } from "expo-crypto";
-import { useGroceryList } from "../../lib/use-list";
+import { GroceryItem, useGroceryList } from "../../lib/use-list";
+import { toArray } from "../../lib/utils";
+import { Swipeable } from "react-native-gesture-handler";
+import { SwipeableRow } from "./swipable-row";
 
 export default function ListScreen() {
   const pathname = usePathname();
-  const [snap, { setName, addItem, setItem }] = useGroceryList("testlist123");
+  const [snap, { setName, addItem, setItem, deleteItem }] =
+    useGroceryList("testlist12443");
   const router = useRouter();
   console.log("render snap", snap);
 
@@ -23,6 +26,9 @@ export default function ListScreen() {
     return <ActivityIndicator />;
   }
 
+  const items = toArray(snap.items);
+  console.log("items", items);
+  console.log("snap items", snap.items);
   return (
     <View style={{ flex: 1, padding: 20 }}>
       <Stack.Screen
@@ -42,24 +48,16 @@ export default function ListScreen() {
           marginBottom: 20,
         }}
       />
-      <Text>List</Text>
+      <Text style={{ marginBottom: 20 }}>List</Text>
       <FlatList
-        data={snap.items}
+        data={items}
         keyExtractor={(i) => i.id}
         renderItem={({ item }) => (
           <ListItem
             key={item.id}
             item={item}
             onRemove={(item) => {
-              if (!snap.items) return;
-              const idx = snap.items.findIndex((i) => i.id === item.id);
-              if (idx === -1) {
-                console.log("id not found when deleting");
-                return;
-              }
-              const newItems = [...snap.items];
-              newItems.splice(idx, 1);
-              mutate("items", newItems);
+              deleteItem(item.id);
             }}
           />
         )}
@@ -67,9 +65,9 @@ export default function ListScreen() {
       <Button
         title="Add"
         onPress={() => {
-          addItem({ name: "Fancy pants", completed: false });
-          return;
-          // router.push("list/add", { onAddItem: });
+          router.push({
+            pathname: "list/add",
+          });
           // mutateMap((m) =>
           //   m.set("asdf", {
           //     id: "moo",
@@ -95,20 +93,32 @@ function ListItem({
   item,
   onRemove,
 }: {
-  item: GroceryList["items"][number];
-  onRemove: (item: GroceryList["items"][number]) => void;
+  item: GroceryItem;
+  onRemove: (item: GroceryItem) => void;
 }) {
   return (
-    <View
-      style={{
-        minHeight: 50,
-        backgroundColor: "white",
-        padding: 10,
-        marginVertical: 1,
-      }}
-    >
-      <Text>{item.name}</Text>
-      <Button title="Remove" onPress={() => onRemove(item)} />
+    <View>
+      <SwipeableRow
+        actions={[
+          {
+            label: "Destroy!",
+            color: "#bb0000",
+            onPress: () => onRemove(item),
+          },
+        ]}
+      >
+        <View
+          style={{
+            minHeight: 50,
+            backgroundColor: "white",
+            padding: 10,
+            marginVertical: 2,
+            justifyContent: "center",
+          }}
+        >
+          <Text>{item.name}</Text>
+        </View>
+      </SwipeableRow>
     </View>
   );
 }

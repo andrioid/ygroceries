@@ -1,8 +1,9 @@
 import { useContext, useEffect, useMemo } from "react";
-import { YContext, useSharedDoc, useSharedMap, useSharedText } from "./data";
+import { YContext, useSharedDoc, useSharedText } from "./data";
 import * as Y from "yjs";
 import { randomUUID } from "expo-crypto";
 import { toArray } from "./utils";
+import { useSharedMap } from "./use-shared-map";
 
 type ListMap = {
   id: string;
@@ -11,12 +12,12 @@ type ListMap = {
 };
 
 type ListSnapShot = {
-  id?: string;
-  name?: string;
-  items?: Array<GroceryItem>;
-} | null;
+  id: string;
+  name: string;
+  items: Record<string, GroceryItem>;
+};
 
-type GroceryItem = {
+export type GroceryItem = {
   id: string;
   name: string;
   //catagoryId: string; // Later
@@ -24,29 +25,20 @@ type GroceryItem = {
 };
 
 type HookReturns = [
-  snapshot: ListSnapShot,
+  list: ListSnapShot,
   mutations: {
     setItem: (id: string, item: GroceryItem) => void;
     setName: (newName: string) => void;
     addItem: (item: Omit<GroceryItem, "id">) => void;
+    deleteItem: (itemId: string) => void;
   }
 ];
 
 export function useGroceryList(id: string): HookReturns {
   const { doc } = useContext(YContext); // Sub documents later maybe
 
-  const [list, mutateList] = useSharedMap<ListMap>(id, doc);
+  const [list, mutateList] = useSharedMap<ListMap, ListSnapShot>(id, doc);
   // TODO: We need observeDeep for useSharedMap
-
-  const snapshot = useMemo(() => {
-    if (!list) return null;
-    console.log("raw", list);
-    return {
-      id: list.id,
-      name: list.name,
-      items: list.items,
-    };
-  }, [list]) as ListSnapShot; // TODO: Make this smarter, works but why???
 
   const mutations = {
     setName: (newName: string) => mutateList((m) => m.set("name", newName)),
@@ -59,22 +51,29 @@ export function useGroceryList(id: string): HookReturns {
     },
     addItem: (item: Omit<GroceryItem, "id">) => {
       const id = randomUUID();
-      console.log("trying to add", id, item);
-      mutateList((m) => {
-        const ITEM_KEY = "items";
-        if (!m.has(ITEM_KEY)) {
-          const newItems = new Y.Map<GroceryItem>();
-          m.set(ITEM_KEY, newItems);
-        }
-        const mi = m.get(ITEM_KEY) as Y.Map<GroceryItem>;
-        mi.set(id, {
+      mutateList((m) =>
+        ensureItemList(m).set(id, {
           id: id,
           ...item,
-        });
-      });
+        })
+      );
+    },
+    deleteItem: (itemId: string) => {
+      mutateList((m) => ensureItemList(m).delete(itemId));
     },
   };
   // TODO: Test this
 
-  return [snapshot, mutations];
+  return [list, mutations];
+}
+
+const ITEM_KEY = "items";
+function ensureItemList(
+  rootMap: Y.Map<string | Y.Map<GroceryItem>>
+): Y.Map<GroceryItem> {
+  if (!rootMap.has(ITEM_KEY)) {
+    const newItems = new Y.Map<GroceryItem>();
+    rootMap.set(ITEM_KEY, newItems);
+  }
+  return rootMap.get(ITEM_KEY) as Y.Map<GroceryItem>;
 }

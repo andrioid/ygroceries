@@ -1,3 +1,4 @@
 export function toArray<T>(arr: Record<string, T>) {
-  return Object.entries(arr).map(([, value]) => value);
+  if (!arr) return [];
+  return Object.entries(arr).map(([, value]) => value) as Array<T>;
 }
