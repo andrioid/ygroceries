@@ -35,8 +35,11 @@ type HookReturns = [
 ];
 
 export function useGroceryList(id: string): HookReturns {
-  const { doc } = useContext(YContext); // Sub documents later maybe
-
+  const yContext = useContext(YContext); // Sub documents later maybe
+  if (yContext === null) {
+    throw new Error("YContext provider not found, make sure to add it");
+  }
+  const { doc } = yContext;
   const [list, mutateList] = useSharedMap<ListMap, ListSnapShot>(id, doc);
   // TODO: We need observeDeep for useSharedMap
 

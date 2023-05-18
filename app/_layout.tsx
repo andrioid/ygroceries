@@ -9,7 +9,10 @@ export default function Layout() {
   return (
     <YProvider roomId="fdasf">
       <Stack>
-        <Stack.Screen name="list/add" options={{ presentation: "modal" }} />
+        <Stack.Screen
+          name="list/[listId]/add"
+          options={{ presentation: "modal" }}
+        />
       </Stack>
     </YProvider>
   );

@@ -1,11 +1,23 @@
-import React, { Component } from "react";
-import { Animated, StyleSheet, Text, View, I18nManager } from "react-native";
+import React, { Component, useState } from "react";
+import {
+  Animated,
+  StyleSheet,
+  Text,
+  View,
+  I18nManager,
+  Pressable,
+} from "react-native";
 
-import { RectButton, Swipeable } from "react-native-gesture-handler";
+import {
+  GestureHandlerRootView,
+  RectButton,
+  Swipeable,
+} from "react-native-gesture-handler";
 
 export function SwipeableRow({
   children,
   actions = [],
+  onPress,
 }: {
   children: React.ReactNode;
   actions: Array<{
@@ -13,34 +25,42 @@ export function SwipeableRow({
     onPress: () => void;
     color: string;
   }>;
+  onPress?: () => void;
 }) {
+  const [allowPress, setAllowPress] = useState(true);
   return (
-    <Swipeable
-      renderRightActions={() => {
-        return (
-          <View style={{ width: 192 }}>
-            {actions.map((action) => (
-              <Animated.View
-                key={JSON.stringify(action)}
-                style={{ flex: 1, transform: [{ translateX: 0 }] }}
-              >
-                <RectButton
-                  style={[
-                    styles.rightAction,
-                    { backgroundColor: action.color },
-                  ]}
-                  onPress={action.onPress}
+    <GestureHandlerRootView>
+      <Swipeable
+        onActivated={() => setAllowPress(false)}
+        onEnded={() => setAllowPress(true)}
+        renderRightActions={() => {
+          return (
+            <View style={{ width: 192 }}>
+              {actions.map((action) => (
+                <Animated.View
+                  key={JSON.stringify(action)}
+                  style={{ flex: 1, transform: [{ translateX: 0 }] }}
                 >
-                  <Text style={styles.actionText}>{action.label}</Text>
-                </RectButton>
-              </Animated.View>
-            ))}
-          </View>
-        );
-      }}
-    >
-      {children}
-    </Swipeable>
+                  <RectButton
+                    style={[
+                      styles.rightAction,
+                      { backgroundColor: action.color },
+                    ]}
+                    onPress={action.onPress}
+                  >
+                    <Text style={styles.actionText}>{action.label}</Text>
+                  </RectButton>
+                </Animated.View>
+              ))}
+            </View>
+          );
+        }}
+      >
+        <Pressable disabled={!allowPress} onPress={onPress}>
+          {children}
+        </Pressable>
+      </Swipeable>
+    </GestureHandlerRootView>
   );
 }
 const styles = StyleSheet.create({

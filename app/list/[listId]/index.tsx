@@ -3,22 +3,34 @@ import {
   Alert,
   Button,
   FlatList,
+  Pressable,
   Text,
   TextInput,
   View,
 } from "react-native";
-import { Stack, usePathname, useRouter } from "expo-router";
+import {
+  Stack,
+  useLocalSearchParams,
+  usePathname,
+  useRouter,
+} from "expo-router";
 import { useEffect, useId } from "react";
 import { randomUUID } from "expo-crypto";
-import { GroceryItem, useGroceryList } from "../../lib/use-list";
-import { toArray } from "../../lib/utils";
+import { GroceryItem, useGroceryList } from "../../../lib/use-list";
+import { toArray } from "../../../lib/utils";
 import { Swipeable } from "react-native-gesture-handler";
-import { SwipeableRow } from "./swipable-row";
+import { SwipeableRow } from "../swipable-row";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function ListScreen() {
-  const pathname = usePathname();
-  const [snap, { setName, addItem, setItem, deleteItem }] =
-    useGroceryList("testlist12443");
+  const { listId } = useLocalSearchParams();
+  if (!listId) {
+    throw new Error("No list found");
+  }
+  console.log("listId", listId);
+  const [snap, { setName, addItem, setItem, deleteItem }] = useGroceryList(
+    listId as string
+  );
   const router = useRouter();
   console.log("render snap", snap);
 
@@ -33,10 +45,10 @@ export default function ListScreen() {
     <View style={{ flex: 1, padding: 20 }}>
       <Stack.Screen
         options={{
-          title: snap.name || "Untitled",
+          title: snap.name || "Shopping List",
         }}
       />
-      <Text style={{ marginBottom: 20 }}>List Name</Text>
+      {/* <Text style={{ marginBottom: 20 }}>List Name</Text>
       <TextInput
         onChangeText={(newValue) => setName(newValue)}
         defaultValue={snap.name}
@@ -47,7 +59,7 @@ export default function ListScreen() {
           paddingHorizontal: 10,
           marginBottom: 20,
         }}
-      />
+      /> */}
       <Text style={{ marginBottom: 20 }}>List</Text>
       <FlatList
         data={items}
@@ -59,6 +71,12 @@ export default function ListScreen() {
             onRemove={(item) => {
               deleteItem(item.id);
             }}
+            onToggle={(item) => {
+              setItem(item.id, {
+                ...item,
+                completed: !item.completed,
+              });
+            }}
           />
         )}
       />
@@ -66,7 +84,7 @@ export default function ListScreen() {
         title="Add"
         onPress={() => {
           router.push({
-            pathname: "list/add",
+            pathname: `list/${listId}/add`,
           });
           // mutateMap((m) =>
           //   m.set("asdf", {
@@ -92,9 +110,11 @@ export default function ListScreen() {
 function ListItem({
   item,
   onRemove,
+  onToggle,
 }: {
   item: GroceryItem;
   onRemove: (item: GroceryItem) => void;
+  onToggle: (item: GroceryItem) => void;
 }) {
   return (
     <View>
@@ -106,6 +126,7 @@ function ListItem({
             onPress: () => onRemove(item),
           },
         ]}
+        onPress={() => onToggle(item)}
       >
         <View
           style={{
@@ -113,10 +134,14 @@ function ListItem({
             backgroundColor: "white",
             padding: 10,
             marginVertical: 2,
-            justifyContent: "center",
+            paddingHorizontal: 20,
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "space-between",
           }}
         >
           <Text>{item.name}</Text>
+          {item.completed && <Ionicons name="checkmark" size={24} />}
         </View>
       </SwipeableRow>
     </View>
