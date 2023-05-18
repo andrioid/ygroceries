@@ -10,6 +10,9 @@ import {
 import { WebsocketProvider } from "./websocket-provider";
 import * as Y from "yjs";
 import { Awareness } from "y-protocols/awareness";
+import { Platform } from "react-native";
+import { init as initProvider } from "./provider";
+
 //import YMMKVProvider from "./yprovider";
 
 interface Props {
@@ -22,7 +25,8 @@ type ContextValue = {
   provider: null | WebsocketProvider;
 };
 const doc = new Y.Doc();
-//const provider = new YMMKVProvider(doc);
+
+initProvider(doc);
 
 export const YContext = createContext<ContextValue>({
   doc,
