@@ -12,6 +12,7 @@ In order to evaluate conflict-free data types for React Native apps, I need some
 - [x] Get y-websocket to run on React Native
 - [x] Screen to show lists (front page for now)
 - [ ] Prompt to create a new list
+- [ ] Show existing lists on home screen
 
 ### I can add an item to my grocery list so that I can buy it later
 
