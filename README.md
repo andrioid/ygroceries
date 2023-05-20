@@ -18,6 +18,7 @@ Needs polish, lots of polish. Persistence seems to be working for both native an
 - [ ] Be able to get a list of grocery lists from YJS
   - [ ] A: Figure out a way to find existing maps on a document
   - [ ] B: Get subdocuments to work, and use `doc.getMap().entries`
+  - [ ] C: Store an index under a known key in the document
 - [ ] Prompt to create a new list
 - [ ] Show existing lists on home screen
 
@@ -41,6 +42,7 @@ Needs polish, lots of polish. Persistence seems to be working for both native an
 
 - [x] YJS doc persistence (web). Using y-indexeddb.
 - [x] YJS doc persistence (native). Using expo-filesystem.
+  - [ ] Debounce persistance, so that we're not constantly hammering the FS
 
 ### I can see the latest changes to my list as soon as I'm online again.
 

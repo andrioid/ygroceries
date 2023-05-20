@@ -40,6 +40,7 @@ export function useGroceryList(id: string): HookReturns {
     throw new Error("YContext provider not found, make sure to add it");
   }
   const { doc } = yContext;
+  console.log("entry", Array.from(doc.getMap("").entries()));
   const [list, mutateList] = useSharedMap<ListMap, ListSnapShot>(id, doc);
 
   const mutations = {
