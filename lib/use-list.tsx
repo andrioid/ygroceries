@@ -41,7 +41,6 @@ export function useGroceryList(id: string): HookReturns {
   }
   const { doc } = yContext;
   const [list, mutateList] = useSharedMap<ListMap, ListSnapShot>(id, doc);
-  // TODO: We need observeDeep for useSharedMap
 
   const mutations = {
     setName: (newName: string) => mutateList((m) => m.set("name", newName)),

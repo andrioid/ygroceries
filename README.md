@@ -1,6 +1,10 @@
 In order to evaluate conflict-free data types for React Native apps, I need something simple to practice with. I'm also quite annoyed with our grocery list app, so why not.
 
-## Scope
+# Current Status
+
+Needs polish, lots of polish. Persistence seems to be working for both native and web. Definitely not ready for any of the app stores yet.
+
+# Scope
 
 ## As a user...
 
@@ -11,6 +15,9 @@ In order to evaluate conflict-free data types for React Native apps, I need some
 - [x] Get YJS to run on React Native
 - [x] Get y-websocket to run on React Native
 - [x] Screen to show lists (front page for now)
+- [ ] Be able to get a list of grocery lists from YJS
+  - [ ] A: Figure out a way to find existing maps on a document
+  - [ ] B: Get subdocuments to work, and use `doc.getMap().entries`
 - [ ] Prompt to create a new list
 - [ ] Show existing lists on home screen
 
@@ -32,9 +39,16 @@ In order to evaluate conflict-free data types for React Native apps, I need some
 
 ### I can make changes to my list even when I don't have Internet.
 
-- [x] YJS doc persistence (web)
-- [ ] YJS doc persistence (native)
+- [x] YJS doc persistence (web). Using y-indexeddb.
+- [x] YJS doc persistence (native). Using expo-filesystem.
 
 ### I can see the latest changes to my list as soon as I'm online again.
 
 - [x] Websockets. Reevaluate later.
+
+### I can see if there are other people working on my list.
+
+- [ ] Decide how to handle app-state so we can store user's name
+  - [ ] A: Context and AsyncStorage.
+  - [ ] B: xstate and AsyncStorage.
+- [ ] Implement awareness over websockets.
