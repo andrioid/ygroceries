@@ -27,20 +27,16 @@ export default function ListScreen() {
   if (!listId) {
     throw new Error("No list found");
   }
-  console.log("listId", listId);
   const [snap, { setName, addItem, setItem, deleteItem }] = useGroceryList(
     listId as string
   );
   const router = useRouter();
-  console.log("render snap", snap);
 
   if (!snap) {
     return <ActivityIndicator />;
   }
 
   const items = toArray(snap.items);
-  console.log("items", items);
-  console.log("snap items", snap.items);
   return (
     <View style={{ flex: 1, padding: 20 }}>
       <Stack.Screen

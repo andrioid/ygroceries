@@ -10,14 +10,7 @@ export const init: ProviderInit = (doc) => {
 const YDB_FILENAME = "content";
 const YDIR = FS.documentDirectory + "ygroceries/";
 
-const yFile = (name: string) => `${YDIR}${name}}.dat`;
-
-async function ensureDirExists() {
-  const dirInfo = await FS.getInfoAsync(YDIR);
-  if (!dirInfo.exists) {
-    await FS.makeDirectoryAsync(YDIR, { intermediates: true });
-  }
-}
+const yFile = (name: string) => `${FS.documentDirectory}${name}.dat`;
 
 async function fileExists(filename: string): Promise<boolean> {
   const fileInfo = await FS.getInfoAsync(filename);
@@ -36,17 +29,22 @@ class FSProvider {
   }
 
   private async init() {
-    await ensureDirExists();
-    const exists = await fileExists(yFile(YDB_FILENAME));
+    //await ensureDirExists();
+    try {
+      const exists = await fileExists(yFile(YDB_FILENAME));
 
-    // Fetch from disk
-    if (exists) {
-      const fromDisk = await FS.readAsStringAsync(yFile(YDB_FILENAME), {
-        encoding: "base64",
-      });
-      if (fromDisk) {
-        Y.applyUpdate(this.doc, yDecode(fromDisk));
+      // Fetch from disk
+      if (exists) {
+        const fromDisk = await FS.readAsStringAsync(yFile(YDB_FILENAME), {
+          encoding: "base64",
+        });
+        if (fromDisk) {
+          Y.applyUpdate(this.doc, yDecode(fromDisk));
+        }
       }
+    } catch (err) {
+      console.error(err);
+      throw new Error("Unable to check if file exists");
     }
 
     // Subscribe to updates

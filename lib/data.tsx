@@ -44,21 +44,23 @@ export function YProvider({ roomId, children }: Props) {
       doc
     );
 
-    providerRef.current.on("status", (event: unknown) => {
-      console.log("ws status", event);
-    });
+    // TODO: Create hook for document status
+    //
+    // providerRef.current.on("status", (event: unknown) => {
+    //   console.log("ws status", event);
+    // });
 
-    providerRef.current.on("sync", (event: unknown) => {
-      console.log("ws sync", event);
-    });
+    // providerRef.current.on("sync", (event: unknown) => {
+    //   console.log("ws sync", event);
+    // });
 
-    providerRef.current.on("connection-close", (event: unknown) => {
-      console.log("ws-closed", event);
-    });
+    // providerRef.current.on("connection-close", (event: unknown) => {
+    //   console.log("ws-closed", event);
+    // });
 
-    providerRef.current.on("connection-error", (event: unknown) => {
-      console.log("ws-error", event);
-    });
+    // providerRef.current.on("connection-error", (event: unknown) => {
+    //   console.log("ws-error", event);
+    // });
 
     return () => {
       providerRef.current?.destroy();
