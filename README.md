@@ -8,6 +8,12 @@ Needs polish, lots of polish. Persistence seems to be working for both native an
 
 ## As a user...
 
+### I can see bought items at the bottom of the list
+
+### I can clear the list of already bought items
+
+### I can see list of recent changes
+
 ### I can easily access my frequently used items when adding to list
 
 - [ ] Add the necessary meta-data to items to show the most recent items
