@@ -9,6 +9,7 @@ type ListMap = {
   id: string;
   name: string;
   items: Y.Map<GroceryItem>;
+  //catagories: Y.Map<CategoryItem>; // Later
 };
 
 type ListSnapShot = {
@@ -22,15 +23,32 @@ export type GroceryItem = {
   name: string;
   //catagoryId: string; // Later
   completed: boolean;
+  deleted: boolean;
+  quantity?: string; // e.g. "2", "2l", "200g"
+
+  createdAt: Date;
+  lastUsedAt: Date;
+  timesAdded: number;
 };
+
+export type CatagoryItem = {
+  id: string;
+  name: string;
+  color: string;
+  //icon: GroceryIcon; // Later
+};
+
+//type GroceryIcon = "" // Later
 
 type HookReturns = [
   list: ListSnapShot,
   mutations: {
     setItem: (id: string, item: GroceryItem) => void;
     setName: (newName: string) => void;
-    addItem: (item: Omit<GroceryItem, "id">) => void;
-    deleteItem: (itemId: string) => void;
+    createNewItem: (item: Partial<GroceryItem>) => void;
+    destroyItem: (itemId: string) => void;
+    //markCompleted: (itemId: string) => void;
+    //markDeleted: (itemId: string) => void;
   }
 ];
 
@@ -45,6 +63,8 @@ export function useGroceryList(id: string): HookReturns {
 
   const mutations = {
     setName: (newName: string) => mutateList((m) => m.set("name", newName)),
+
+    // Modify an existing item. Almost any action is setItem
     setItem: (id: string, item: GroceryItem) => {
       mutateList((m) => {
         const yList =
@@ -52,16 +72,23 @@ export function useGroceryList(id: string): HookReturns {
         yList.set(id, item);
       });
     },
-    addItem: (item: Omit<GroceryItem, "id">) => {
+    // Create a new item
+    createNewItem: (item: Partial<GroceryItem>) => {
       const id = randomUUID();
       mutateList((m) =>
         ensureItemList(m).set(id, {
           id: id,
-          ...item,
+          name: item.name ?? "Default",
+          completed: item.completed ?? false,
+          deleted: item.deleted ?? false,
+          createdAt: item.createdAt ?? new Date(),
+          lastUsedAt: item.lastUsedAt ?? new Date(),
+          timesAdded: item.timesAdded ?? 1,
         })
       );
     },
-    deleteItem: (itemId: string) => {
+    // Completely removes a record. Rarely used.
+    destroyItem: (itemId: string) => {
       mutateList((m) => ensureItemList(m).delete(itemId));
     },
   };

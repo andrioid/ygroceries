@@ -54,3 +54,21 @@ Needs polish, lots of polish. Persistence seems to be working for both native an
   - [ ] A: Context and AsyncStorage.
   - [ ] B: xstate and AsyncStorage.
 - [ ] Implement awareness over websockets.
+
+### I can ask my partner to review certain items on our list
+
+When you're not at home, but you plan on going shopping later. Then you can quickly request someone at home to review the list.
+
+- [ ] Implement basic actionable push notifications
+- [ ] Schedule sending it, but don't send right away
+- [ ] Partner can confirm or remove items
+- [ ] Add a swipeable item with "Ask" to mark the item as "uncertain"
+
+### I can group by items into catagories and sort the list by them
+
+Super market chains usually have a floor plan that follows a certain order. So, it makes sense to show the items you're passing first, first.
+
+- [ ] Create default catagories. No names, just colors.
+- [ ] Be able to assign a color to an item in a quick way
+- [ ] Be able to edit the catagory name
+- [ ] Be able to edit catagory icon

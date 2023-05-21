@@ -1,7 +1,7 @@
 import { Text, View, Platform, Pressable, Button } from "react-native";
 import { Link, Stack, useRouter } from "expo-router";
-import { useContext, useEffect, useRef } from "react";
-import { YContext, useSharedDoc, useSharedMap } from "../lib/data";
+import { useContext } from "react";
+import { YContext } from "../lib/data";
 
 export default function RootScreen() {
   const { doc } = useContext(YContext);

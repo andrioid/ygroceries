@@ -27,9 +27,7 @@ export default function ListScreen() {
   if (!listId) {
     throw new Error("No list found");
   }
-  const [snap, { setName, addItem, setItem, deleteItem }] = useGroceryList(
-    listId as string
-  );
+  const [snap, { setItem, destroyItem }] = useGroceryList(listId as string);
   const router = useRouter();
 
   if (!snap) {
@@ -65,7 +63,7 @@ export default function ListScreen() {
             key={item.id}
             item={item}
             onRemove={(item) => {
-              deleteItem(item.id);
+              destroyItem(item.id);
             }}
             onToggle={(item) => {
               setItem(item.id, {

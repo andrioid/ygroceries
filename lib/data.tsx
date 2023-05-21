@@ -75,35 +75,6 @@ export function YProvider({ roomId, children }: Props) {
   );
 }
 
-export function useSharedMap2<T extends object>(name: string) {
-  const { doc } = useContext(YContext);
-
-  const map = doc.getMap<T[keyof T]>(name);
-
-  const [snapshot, setSnapshot] = useState<T>(getSharedMapSnapshot<T>(map));
-
-  useEffect(() => {
-    const onChange = () => {
-      const value = getSharedMapSnapshot<T>(map);
-      setSnapshot(value);
-    };
-    map.observe(onChange);
-
-    return () => {
-      map.unobserve(onChange);
-    };
-  }, [map]);
-
-  const mutate = useCallback(
-    (updator: (map: Y.Map<T[keyof T]>) => void) => {
-      doc.transact(() => updator(map));
-    },
-    [doc, map]
-  );
-
-  return [snapshot, mutate] as const;
-}
-
 export function useSharedText(name: string, doc: Y.Doc) {
   const text = doc.getText(name);
 
