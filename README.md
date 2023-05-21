@@ -4,6 +4,25 @@ In order to evaluate conflict-free data types for React Native apps, I need some
 
 Needs polish, lots of polish. Persistence seems to be working for both native and web. Definitely not ready for any of the app stores yet.
 
+# Vision
+
+### Opinionated
+
+Ruthlessly optimised for grocery shopping. Other use-cases may be possible, but not directly supported.
+
+### Works out of the box
+
+No user-registration prompts or anything preventing you from using it within seconds of installing it.
+
+### Business model (if I take this further)
+
+- Free for single users
+- Premium for co-operation features
+  - Ads
+  - In app purchases
+
+I don't mind the app itself being free, but hosting and maintaining the syncing infrastructure requires both time and money.
+
 # Scope
 
 ## As a user...
