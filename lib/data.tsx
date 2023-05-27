@@ -10,10 +10,8 @@ import {
 import { WebsocketProvider } from "./websocket-provider";
 import * as Y from "yjs";
 import { Awareness } from "y-protocols/awareness";
-import { Platform } from "react-native";
 import { init as initProvider } from "./provider";
-
-//import YMMKVProvider from "./yprovider";
+import { HocuspocusProvider } from "@hocuspocus/provider";
 
 interface Props {
   roomId: string;
@@ -39,7 +37,7 @@ export function YProvider({ roomId, children }: Props) {
     if (!roomId) return;
 
     providerRef.current = new WebsocketProvider(
-      "ws://10.8.4.38:1234",
+      "wss://yserver.fly.dev",
       "groceries",
       doc
     );
