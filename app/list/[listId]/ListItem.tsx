@@ -39,7 +39,7 @@ export function ListItem({
   // }, [textRef.current]);
 
   const animationConfig = {
-    duration: 2000,
+    duration: 1500,
     easing: Easing.out(Easing.exp),
   };
 
