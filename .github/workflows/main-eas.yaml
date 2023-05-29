@@ -43,6 +43,10 @@ jobs:
       name: web-demo
       url: ${{ steps.publish.outputs.page_url }}
 
+    permissions:
+      pages: write
+      id-token: write
+
     runs-on: ubuntu-latest
     needs: eas
     steps:
