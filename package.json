@@ -7,8 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "static": "expo export -p web",
-    "deploy:web": "vercel dist",
+    "build:web": "expo export -p web",
+    "deploy:web": "TODO: Vercel keeps eating the assets",
     "ws": "HOST=10.8.4.38 PORT=1234 YPERSISTANCE=./dbDir node ./node_modules/y-websocket/bin/server.js"
   },
   "dependencies": {
