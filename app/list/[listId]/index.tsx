@@ -16,11 +16,10 @@ import {
 } from "expo-router";
 import { useEffect, useId } from "react";
 import { randomUUID } from "expo-crypto";
-import { GroceryItem, useGroceryList } from "../../../lib/use-list";
+import { useGroceryList } from "../../../lib/use-list";
 import { toArray } from "../../../lib/utils";
 import { Swipeable } from "react-native-gesture-handler";
-import { SwipeableRow } from "../swipable-row";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { ListItem } from "./ListItem";
 
 export default function ListScreen() {
   const { listId } = useLocalSearchParams();
@@ -34,7 +33,18 @@ export default function ListScreen() {
     return <ActivityIndicator />;
   }
 
-  const items = toArray(snap.items);
+  const items = toArray(snap.items)
+    .filter((i) => i.deleted === false)
+    .sort((a, b) => {
+      if (a.completed && !b.completed) {
+        return 1;
+      }
+      if (!a.completed && b.completed) {
+        return -1;
+      }
+      return a.name.localeCompare(b.name);
+    });
+
   return (
     <View style={{ flex: 1, padding: 20 }}>
       <Stack.Screen
@@ -97,47 +107,6 @@ export default function ListScreen() {
           // ]);
         }}
       />
-    </View>
-  );
-}
-
-function ListItem({
-  item,
-  onRemove,
-  onToggle,
-}: {
-  item: GroceryItem;
-  onRemove: (item: GroceryItem) => void;
-  onToggle: (item: GroceryItem) => void;
-}) {
-  return (
-    <View>
-      <SwipeableRow
-        actions={[
-          {
-            label: "Destroy!",
-            color: "#bb0000",
-            onPress: () => onRemove(item),
-          },
-        ]}
-        onPress={() => onToggle(item)}
-      >
-        <View
-          style={{
-            minHeight: 50,
-            backgroundColor: "white",
-            padding: 10,
-            marginVertical: 2,
-            paddingHorizontal: 20,
-            alignItems: "center",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <Text>{item.name}</Text>
-          {item.completed && <Ionicons name="checkmark" size={24} />}
-        </View>
-      </SwipeableRow>
     </View>
   );
 }

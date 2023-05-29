@@ -6,6 +6,7 @@ import {
   View,
   I18nManager,
   Pressable,
+  PlatformColor,
 } from "react-native";
 
 import {
@@ -28,6 +29,7 @@ export function SwipeableRow({
   onPress?: () => void;
 }) {
   const [allowPress, setAllowPress] = useState(true);
+
   return (
     <GestureHandlerRootView>
       <Swipeable
