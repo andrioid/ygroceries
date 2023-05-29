@@ -29,11 +29,9 @@ jobs:
         run: npm run build:web
       
       - name: Upload static asset
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-pages-artifact@v1
         with:
-          name: web
-          path: |
-            dist
+          path: ./dist
           retention-days: 1
 
       - name: 🚀 Create update
@@ -53,5 +51,3 @@ jobs:
       - name: Publish static site
         id: publish
         uses: actions/deploy-pages@v2
-        with:
-          artifact_name: web
