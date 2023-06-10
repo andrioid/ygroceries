@@ -4,17 +4,21 @@ import {
   useNavigation,
   useRouter,
 } from "expo-router";
-import { View, Text, TextInput, Button, Platform } from "react-native";
-import { useGroceryList } from "../../../lib/use-list";
+import {
+  View,
+  TextInput,
+  Button,
+  Platform,
+  FlatList,
+  Text,
+  Pressable,
+} from "react-native";
+import { GroceryItem, useGroceryList } from "../../../lib/use-list";
 import { useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import { toArray } from "../../../lib/utils";
+import { Icon } from "../../../lib/icon";
 
-const groceryOptions: Array<string> = [
-  "Mælk",
-  "Æg",
-  "Advokado",
-  "Nakkekitteleter",
-];
 export default function AddListScreen() {
   const { listId } = useLocalSearchParams();
   const navigation = useNavigation();
@@ -25,7 +29,9 @@ export default function AddListScreen() {
     throw new Error("No list found");
   }
 
-  const [, { createNewItem }] = useGroceryList(listId as string);
+  const [snap, { createNewItem, destroyItem, setItem }] = useGroceryList(
+    listId as string
+  );
   const [name, setName] = useState<string | undefined>();
 
   function handleSubmit() {
@@ -37,6 +43,21 @@ export default function AddListScreen() {
     });
     setName("");
   }
+
+  const flatListItems = toArray(snap.items)
+    .filter((i) => {
+      if (i.deleted) return false;
+      return name
+        ? i.name.toLocaleLowerCase().includes(name.toLocaleLowerCase())
+        : true;
+    })
+    .sort((a, b) => {
+      // sort by timesAdded and then by name
+      if (a.timesAdded > b.timesAdded) {
+        return -1;
+      }
+      return a.name.localeCompare(b.name);
+    });
 
   return (
     <View style={{ padding: 20 }}>
@@ -50,23 +71,79 @@ export default function AddListScreen() {
             : undefined,
         }}
       />
-      <TextInput
-        autoFocus
-        onChangeText={setName}
-        placeholder="Start typing..."
-        value={name}
+      <View
         style={{
-          minHeight: 50,
-          backgroundColor: "white",
-          borderRadius: 15,
-          paddingHorizontal: 10,
-          marginBottom: 20,
-          marginTop: 20,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          gap: 5,
         }}
-        onSubmitEditing={handleSubmit}
+      >
+        <TextInput
+          autoFocus
+          onChangeText={setName}
+          placeholder="Start typing..."
+          value={name}
+          style={{
+            flex: 1,
+            minHeight: 50,
+            backgroundColor: "white",
+            borderRadius: 15,
+            paddingHorizontal: 10,
+            marginBottom: 20,
+            marginTop: 20,
+          }}
+          onSubmitEditing={handleSubmit}
+        />
+        <Button title="Add" onPress={handleSubmit} />
+      </View>
+      <FlatList
+        data={flatListItems}
+        renderItem={({ item }) => (
+          <AddItem
+            item={item}
+            onRemove={() =>
+              setItem(item.id, {
+                ...item,
+                completed: false,
+                deleted: false,
+              })
+            }
+          />
+        )}
       />
-      <Button title="Add" onPress={handleSubmit} />
+
       {Platform.OS === "ios" && <StatusBar style="light" />}
+    </View>
+  );
+}
+
+function AddItem({
+  item,
+  onAdd,
+  onRemove,
+}: {
+  item: GroceryItem;
+  onAdd: () => void;
+  onRemove: () => void;
+}) {
+  const isAdded = !item.completed;
+  const addColor = isAdded ? "green" : "black";
+
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        gap: 10,
+        alignItems: "center",
+      }}
+    >
+      <Pressable>
+        <Icon name="add-circle" color={addColor} />
+      </Pressable>
+      <Text>{item.name}</Text>
+      <Pressable onPress={onRemove}>
+        <Icon name="remove-circle" color={addColor} />
+      </Pressable>
     </View>
   );
 }
