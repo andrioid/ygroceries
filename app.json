@@ -12,9 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "dk.andri.groceries"
@@ -34,6 +32,9 @@
       "eas": {
         "projectId": "c4b00d2f-d15a-4a68-9fdb-89864c8586ad"
       }
+    },
+    "splash": {
+      "image": "./assets/splash.png"
     },
     "runtimeVersion": {
       "policy": "sdkVersion"

@@ -11,7 +11,6 @@ import { WebsocketProvider } from "./websocket-provider";
 import * as Y from "yjs";
 import { Awareness } from "y-protocols/awareness";
 import { init as initProvider } from "./provider";
-import { HocuspocusProvider } from "@hocuspocus/provider";
 
 interface Props {
   roomId: string;
