@@ -31,6 +31,7 @@ export default function RootScreen() {
       />
       {lists.map((list) => (
         <Pressable
+          key={list.id}
           onPress={() => router.push(`/list/${list.id}`)}
           style={{
             flexDirection: "row",

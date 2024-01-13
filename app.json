@@ -8,11 +8,11 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/splash.png"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "dk.andri.groceries"
@@ -33,15 +33,15 @@
         "projectId": "c4b00d2f-d15a-4a68-9fdb-89864c8586ad"
       }
     },
-    "splash": {
-      "image": "./assets/splash.png"
-    },
     "runtimeVersion": {
       "policy": "sdkVersion"
     },
     "updates": {
       "url": "https://u.expo.dev/c4b00d2f-d15a-4a68-9fdb-89864c8586ad"
     },
-    "owner": "andrioid"
+    "owner": "andrioid",
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
