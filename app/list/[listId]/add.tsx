@@ -75,7 +75,9 @@ export default function AddListScreen() {
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
-          gap: 5,
+          alignItems: "center",
+          marginBottom: 20,
+          gap: 4,
         }}
       >
         <TextInput
@@ -85,16 +87,16 @@ export default function AddListScreen() {
           value={name}
           style={{
             flex: 1,
-            minHeight: 50,
+            paddingVertical: 10,
             backgroundColor: "white",
             borderRadius: 15,
-            paddingHorizontal: 10,
-            marginBottom: 20,
-            marginTop: 20,
+            paddingHorizontal: 20,
           }}
           onSubmitEditing={handleSubmit}
         />
-        <Button title="Add" onPress={handleSubmit} />
+        <View style={{ height: 50 }}>
+          <Button title="Add" onPress={handleSubmit} />
+        </View>
       </View>
       <FlatList
         data={flatListItems}
@@ -108,6 +110,13 @@ export default function AddListScreen() {
                 deleted: false,
               })
             }
+            onAdd={() => {
+              alert("todo");
+              setItem(item.id, {
+                ...item,
+                //quantity: item.quantity ? 0 + 1,
+              });
+            }}
           />
         )}
       />
@@ -135,15 +144,21 @@ function AddItem({
         flexDirection: "row",
         gap: 10,
         alignItems: "center",
+        justifyContent: "space-between",
       }}
     >
-      <Pressable>
-        <Icon name="add-circle" color={addColor} />
-      </Pressable>
       <Text>{item.name}</Text>
-      <Pressable onPress={onRemove}>
-        <Icon name="remove-circle" color={addColor} />
-      </Pressable>
+      <View style={{ flexDirection: "row", gap: 2, alignItems: "center" }}>
+        <Pressable onPress={onAdd}>
+          <Icon name="add-circle" color={addColor} />
+        </Pressable>
+        <View style={{ width: 15, alignItems: "center" }}>
+          <Text>{item.quantity ?? 0}</Text>
+        </View>
+        <Pressable onPress={onRemove}>
+          <Icon name="remove-circle" color={addColor} />
+        </Pressable>
+      </View>
     </View>
   );
 }

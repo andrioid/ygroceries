@@ -49,6 +49,8 @@ type HookReturns = [
     destroyItem: (itemId: string) => void;
     //markCompleted: (itemId: string) => void;
     //markDeleted: (itemId: string) => void;
+    increase: (itemId: string) => void;
+    decrease: (itemId: string) => void;
   }
 ];
 
@@ -83,6 +85,7 @@ export function useGroceryList(id: string): HookReturns {
           createdAt: item.createdAt ?? new Date(),
           lastUsedAt: item.lastUsedAt ?? new Date(),
           timesAdded: item.timesAdded ?? 1,
+          quantity: item.quantity ?? "1",
         })
       );
     },
@@ -90,6 +93,12 @@ export function useGroceryList(id: string): HookReturns {
     destroyItem: (itemId: string) => {
       mutateList((m) => ensureItemList(m).delete(itemId));
     },
+
+    // Increases quantity, understands units if any
+    increase: (itemId: string) => {},
+
+    // Decreases or deletes, dependin on quantity value
+    decrease: (itemId: string) => {},
   };
   // TODO: Test this
 

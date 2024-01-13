@@ -14,11 +14,8 @@ import {
   usePathname,
   useRouter,
 } from "expo-router";
-import { useEffect, useId } from "react";
-import { randomUUID } from "expo-crypto";
 import { useGroceryList } from "../../../lib/use-list";
 import { toArray } from "../../../lib/utils";
-import { Swipeable } from "react-native-gesture-handler";
 import { ListItem } from "./ListItem";
 
 export default function ListScreen() {
@@ -52,18 +49,7 @@ export default function ListScreen() {
           title: snap.name || "Shopping List",
         }}
       />
-      {/* <Text style={{ marginBottom: 20 }}>List Name</Text>
-      <TextInput
-        onChangeText={(newValue) => setName(newValue)}
-        defaultValue={snap.name}
-        style={{
-          minHeight: 50,
-          backgroundColor: "white",
-          borderRadius: 15,
-          paddingHorizontal: 10,
-          marginBottom: 20,
-        }}
-      /> */}
+
       <Text style={{ marginBottom: 20 }}>List</Text>
       <FlatList
         data={items}
@@ -90,21 +76,6 @@ export default function ListScreen() {
           router.push({
             pathname: `list/${listId}/add`,
           });
-          // mutateMap((m) =>
-          //   m.set("asdf", {
-          //     id: "moo",
-          //   })
-          // );
-          // return;
-          // if (!snap.items) return;
-          // mutate("items", [
-          //   ...snap.items,
-          //   {
-          //     id: randomUUID(),
-          //     completed: false,
-          //     name: "omg item",
-          //   },
-          // ]);
         }}
       />
     </View>
