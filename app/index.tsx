@@ -46,9 +46,6 @@ export default function RootScreen() {
           />
         </Pressable>
       ))}
-      <View className="bg-red-500">
-        <Text className="text-2xl text-pink-600">tailwind test</Text>
-      </View>
     </View>
   );
 }
